@@ -1,48 +1,83 @@
-let path = require('path')
-let KeyEthereum = require('keythereum')
-let Tx =  require('ethereumjs-tx')
-let Web3 = require('web3-cmt')
+const express = require('express')
+const bodyParser = require('body-parser')
+const web3Cmt = require('./web3cmt')
 
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:9545"))
+const app = express()
+const port = 3000
 
-function sign(address, password) {
-	let keyObject = KeyEthereum.importFromFile(address, process.cwd())
-	let privateKey = KeyEthereum.recover(password, keyObject)
-
-	var cmtInput = {
-		type: 'stake/verifyCandidacy',
-		data: {
-			candidate_address: address,
-			verified: true
-		}
+var options = {
+	dotfiles: 'ignore',
+	etag: false,
+	extensions: ['js', 'html', 'css'],
+	// index: false,
+	redirect: false,
+	setHeaders: function (res, path, stat) {
+	  res.set('x-timestamp', Date.now())
 	}
+}
+  
+app.use(express.static('dist', options))
 
-	const nonce = web3.cmt.getTransactionCount(address)
+app.use(bodyParser.json())
 
-	let rawTx = {
-		nonce: nonce,
-		from: address,
-		/*
-		to: '0x0123456789012345678901234567890123456789',
-		value: '0x2',
-		gasPrice: '0x00',
-		gasLimit: '0x5208',
-		*/
-		chainId: Number(1234),
-		data: '0x' + Buffer.from(JSON.stringify(cmtInput)).toString('hex')
+app.post('/transfer', (req, res) => {
+	try {
+		let tx = web3Cmt.transfer(req.body)
+		res.send(tx)
+	} catch (e) {
+		console.log(e)
+		res.status(500).send(e.message)
 	}
+})
 
-	let tx = new Tx(rawTx)
-	tx.sign(privateKey)
-	let signedTx = "0x" + tx.serialize().toString("hex")
+app.post('/verify', (req, res) => {
+	try {
+		let tx = web3Cmt.verify(req.body)
+		res.send(tx)
+	} catch (e) {
+		console.log(e)
+		res.status(500).send(e.message)
+	}
+})
 
-	return signedTx
-}
+app.post('/activate', (req, res) => {
+	try {
+		let tx = web3Cmt.activate(req.body)
+		res.send(tx)
+	} catch (e) {
+		console.log(e)
+		res.status(500).send(e.message)
+	}
+})
 
-let signedTx = sign('0x7eFf122b94897EA5b0E2A9abf47B86337FAfebdC', '1234')
-try {
-	let r = web3.cmt.sendRawTx(signedTx)
-	console.log(r.hash)
-} catch (e) {
-	console.log(e.message)
-}
+app.post('/deactivate', (req, res) => {
+	try {
+		let tx = web3Cmt.deactivate(req.body)
+		res.send(tx)
+	} catch (e) {
+		console.log(e)
+		res.status(500).send(e.message)
+	}
+})
+
+app.post('/withdraw', (req, res) => {
+	try {
+		let tx = web3Cmt.withdraw(req.body)
+		res.send(tx)
+	} catch (e) {
+		console.log(e)
+		res.status(500).send(e.message)
+	}
+})
+
+app.get('/getcmttx', (req, res) => {
+	try {
+		let tx = web3Cmt.getCmtTx(req.query.hash)
+		res.send(tx)
+	} catch (e) {
+		console.log(e)
+		res.status(500).send(e.message)
+	}
+})
+
+app.listen(port, () => console.log(`App listening on port ${port}!`))

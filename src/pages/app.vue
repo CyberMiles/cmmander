@@ -1,33 +1,87 @@
 <template>
-<div class="columns">
-	<div class="column">
-		First column
-	</div>
-	<div class="column">
-		Second column
-	</div>
-	<div class="column">
-		Third column
-	</div>
-	<div class="column">
-		Fourth column
-	</div>
-</div>
+    <section>
+        
+        <b-tabs v-model="activeTab">
+            <b-tab-item label="Transfer">
+                <transfer></transfer>
+            </b-tab-item>
+
+            <b-tab-item label="Verify">
+				<verify></verify>
+            </b-tab-item>
+
+            <b-tab-item label="Activate">
+				<activate></activate>
+            </b-tab-item>
+
+            <b-tab-item label="Deactivate">
+				<deactivate></deactivate>
+            </b-tab-item>
+
+            <b-tab-item label="Withdraw">
+				<withdraw></withdraw>
+            </b-tab-item>
+        </b-tabs>
+    </section>
 </template>
 
 <script>
-export default {
-	name: 'app',
-	data () {
-		return {
-			msg: 'Welcome to Your Vue.js App!'
+	import Transfer from './transfer.vue'
+	import Verify from './verify.vue'
+	import Activate from './activate.vue'
+	import Deactivate from './deactivate.vue'
+	import Withdraw from './withdraw.vue'
+    export default {
+        data() {
+            return {
+                activeTab: 0
+            }
+        },
+		components: {
+			Transfer,
+			Verify,
+			Activate,
+			Deactivate,
+			Withdraw
+		},
+		methods: {
+			getCmtTx(hash, txs) {
+                this.$http.get('/getcmttx?hash=' + hash)
+                .then((response) => {
+                    let d = response.data
+                    if (d && !d.blockNumber) {
+                        setTimeout( () => {
+                            this.getCmtTx(hash, txs)
+                        }, 10000)
+                    }
+                    for (let i in txs) {
+                        if (txs[i].hash == hash) {
+                            txs.splice(i, 1, {hash:hash, body:JSON.stringify(d, null, '\t')})
+                            break
+                        }
+                    }
+                }).catch((e) => {
+                    setTimeout( () => {
+                        this.getCmtTx(hash, txs)
+                    }, 10000)
+                })
+            }
 		}
-	}
-}
+    }
 </script>
 
-<style lang="css">
-	#app {
-		color: #56b983;
-	}
+
+
+
+<style>
+    .history {
+        margin-top: 1.5rem;
+    }
+    .history .panel-heading {
+        font-size: 0.9em;
+        overflow: auto;
+    }
+    .history .panel-heading strong {
+        float: right;
+    }
 </style>
