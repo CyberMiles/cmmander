@@ -5,7 +5,7 @@ const Web3 = require('web3-cmt')
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.CMMANDER_WEB3_PROVIDER || 'http://localhost:8545'))
 
-const ChainId = Number(1234)
+const ChainId = Number(process.env.CMMANDER_WEB3_CHAINID || 1234)
 
 function sendRawTx(from, password, rawTx) {
 	let keyObject = KeyEthereum.importFromFile(from, process.cwd())
