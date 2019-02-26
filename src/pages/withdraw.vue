@@ -1,42 +1,40 @@
 <template>
-<div class="columns">
-    <div class="column is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
-        <section>
-            <form @submit.prevent="sendTx">
-                <b-field horizontal label="From">
-                    <b-input v-model="from" placeholder="0x"></b-input>
-                </b-field>
+<div class="container">
+    <section>
+        <form @submit.prevent="sendTx">
+            <b-field horizontal label="From">
+                <b-input v-model="from" placeholder="0x"></b-input>
+            </b-field>
 
-                <b-field horizontal label="Password">
-                    <b-input type="password" v-model="password"></b-input>
-                </b-field>
+            <b-field horizontal label="Password">
+                <b-input type="password" v-model="password"></b-input>
+            </b-field>
 
-                <b-field horizontal label="Validator">
-                    <b-input v-model="validator" placeholder="0x"></b-input>
-                </b-field>
+            <b-field horizontal label="Validator">
+                <b-input v-model="validator" placeholder="0x"></b-input>
+            </b-field>
 
-                <b-field horizontal label="amount">
-                    <b-input v-model="amount" placeholder=""></b-input>
-                </b-field>
+            <b-field horizontal label="Amount">
+                <b-input v-model="amount" placeholder=""></b-input>
+            </b-field>
 
-                <b-field horizontal>
-                        <button type="submit" class="button is-primary" v-bind:disabled="waiting">
-                        Withdraw
-                        </button>
-                </b-field>
-            </form>
-        </section>
-        <section class="history">
-            <nav class="panel" v-for="(tx, i) in txs" :key="tx.hash">
-                <p class="panel-heading">
-                    <strong>{{i+1}}</strong> {{ tx.hash }}
-                </p>
-                <div class="panel-block">
-                    <pre>{{ tx.body }}</pre>
-                </div>
-            </nav>
-        </section>
-    </div>
+            <b-field horizontal>
+                    <button type="submit" class="button is-primary" v-bind:disabled="waiting">
+                    Delegator Withdraw
+                    </button>
+            </b-field>
+        </form>
+    </section>
+    <section class="history">
+        <nav class="panel" v-for="(tx, i) in txs" :key="tx.hash">
+            <p class="panel-heading">
+                <strong>{{i+1}}</strong> {{ tx.hash }}
+            </p>
+            <div class="panel-block">
+                <pre>{{ tx.body }}</pre>
+            </div>
+        </nav>
+    </section>
 </div>
 </template>
 

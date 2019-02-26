@@ -30,7 +30,7 @@ function transfer(params) {
 		nonce: nonce,
 		from: from,
 		to: to,
-		value: value,
+		value: '0x'+dec2hex(value),
 		gasPrice: '0x00',
 		gasLimit: '0x5208',
 		chainId: ChainId
@@ -133,8 +133,144 @@ function withdraw(params) {
 	return sendRawTx(from, password, rawTx)
 }
 
+function compRate(params) {
+    const from = params.from
+    const password = params.password
+    const delegator = params.delegator
+    const compRate = params.compRate
+
+	let cmtInput = {
+		type: 'stake/setCompRate',
+		data: {
+			delegator_address: delegator,
+			comp_rate: compRate
+		}
+	}
+
+	const nonce = web3.cmt.getTransactionCount(from)
+
+	let rawTx = {
+		nonce: nonce,
+		from: from,
+		chainId: ChainId,
+		data: '0x' + Buffer.from(JSON.stringify(cmtInput)).toString('hex')
+	}
+
+	return sendRawTx(from, password, rawTx)
+}
+
+function update(params) {
+    const from = params.from
+    const password = params.password
+    const pubKey = params.pubKey
+	const compRate = params.compRate
+	const maxAmount = params.maxAmount
+	const name = params.name
+	const website = params.website
+	const email = params.email
+	const location = params.location
+	const profile = params.profile
+
+	let cmtInput = {
+		type: 'stake/updateCandidacy',
+		data: {
+			description: {
+				name: name,
+				email: email,
+				website: website,
+				location: location,
+				profile: profile
+			}
+		}
+	}
+	if (pubKey) {
+		cmtInput.data.pub_key = pubKey
+	}
+	if (compRate) {
+		cmtInput.data.comp_rate = compRate
+	}
+	if (maxAmount) {
+		cmtInput.data.max_amount = maxAmount
+	}
+
+	const nonce = web3.cmt.getTransactionCount(from)
+
+	let rawTx = {
+		nonce: nonce,
+		from: from,
+		chainId: ChainId,
+		data: '0x' + Buffer.from(JSON.stringify(cmtInput)).toString('hex')
+	}
+
+	return sendRawTx(from, password, rawTx)
+}
+
+function shift(params) {
+    const from = params.from
+    const password = params.password
+    const candidate = params.candidate
+
+	let cmtInput = {
+		type: 'stake/updateCandidacyAccount',
+		data: {
+			new_candidate_account: candidate
+		}
+	}
+
+	const nonce = web3.cmt.getTransactionCount(from)
+
+	let rawTx = {
+		nonce: nonce,
+		from: from,
+		chainId: ChainId,
+		data: '0x' + Buffer.from(JSON.stringify(cmtInput)).toString('hex')
+	}
+
+	return sendRawTx(from, password, rawTx)
+}
+
+function accept(params) {
+    const from = params.from
+    const password = params.password
+    const requestId = params.requestId
+
+	let cmtInput = {
+		type: 'stake/acceptCandidacyAccountUpdate',
+		data: {
+			account_update_request_id: Number(requestId)
+		}
+	}
+
+	const nonce = web3.cmt.getTransactionCount(from)
+
+	let rawTx = {
+		nonce: nonce,
+		from: from,
+		chainId: ChainId,
+		data: '0x' + Buffer.from(JSON.stringify(cmtInput)).toString('hex')
+	}
+
+	return sendRawTx(from, password, rawTx)
+}
+
 function getCmtTx(hash) {
     return web3.cmt.getCmtTransaction(hash)
 }
 
-module.exports = {transfer, verify, activate, deactivate, withdraw, getCmtTx}
+function dec2hex(str){ // .toString(16) only works up to 2^53
+	var dec = str.toString().split(''), sum = [], hex = [], i, s
+	while(dec.length){
+		s = 1 * dec.shift()
+		for(i = 0; s || i < sum.length; i++){
+			s += (sum[i] || 0) * 10
+			sum[i] = s % 16
+			s = (s - sum[i]) / 16
+		}
+	}
+	while(sum.length){
+		hex.push(sum.pop().toString(16))
+	}
+	return hex.join('')
+}
+
+module.exports = {transfer, verify, activate, deactivate, withdraw, compRate, update, shift, accept, getCmtTx}

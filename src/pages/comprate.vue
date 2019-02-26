@@ -10,19 +10,17 @@
                 <b-input type="password" v-model="password"></b-input>
             </b-field>
 
-            <b-field horizontal label="Candidate">
-                <b-input v-model="candidate" placeholder="0x"></b-input>
+            <b-field horizontal label="Delegator">
+                <b-input v-model="delegator" placeholder="0x"></b-input>
             </b-field>
 
-            <b-field horizontal label="Verified">
-                <b-switch v-model="verified">
-                    {{ verified }}
-                </b-switch>
+            <b-field horizontal label="CompRate">
+                <b-input v-model="compRate" placeholder="0.1"></b-input>
             </b-field>
 
             <b-field horizontal>
                     <button type="submit" class="button is-primary" v-bind:disabled="waiting">
-                    Verify Candidate
+                    Set CompRate
                     </button>
             </b-field>
         </form>
@@ -47,8 +45,8 @@
             return {
                 from: '',
                 password: '',
-                candidate: '',
-                verified: '',
+                delegator: '',
+                compRate: '',
 
                 waiting: false,
                 txs: []
@@ -57,11 +55,11 @@
         methods: {
             sendTx() {
                 this.waiting = true
-                this.$http.post('/verify', {
+                this.$http.post('/comprate', {
                     from: this.from,
                     password: this.password,
-                    candidate: this.candidate,
-                    verified: this.verified
+                    delegator: this.delegator,
+                    compRate: this.compRate
                 })
                 .then((response) => {
                     this.txs.push({hash:response.data})

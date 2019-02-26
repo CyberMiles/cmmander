@@ -10,19 +10,41 @@
                 <b-input type="password" v-model="password"></b-input>
             </b-field>
 
-            <b-field horizontal label="Candidate">
-                <b-input v-model="candidate" placeholder="0x"></b-input>
+            <b-field horizontal label="PubKey">
+                <b-input v-model="pubKey" placeholder=""></b-input>
             </b-field>
 
-            <b-field horizontal label="Verified">
-                <b-switch v-model="verified">
-                    {{ verified }}
-                </b-switch>
+            <b-field horizontal label="MaxAmount">
+                <b-input v-model="maxAmount" placeholder=""></b-input>
+            </b-field>
+
+            <b-field horizontal label="CompRate">
+                <b-input v-model="compRate" placeholder="0.1"></b-input>
+            </b-field>
+
+            <b-field horizontal label="Name">
+                <b-input v-model="name" placeholder=""></b-input>
+            </b-field>
+
+            <b-field horizontal label="Website">
+                <b-input v-model="website" placeholder=""></b-input>
+            </b-field>
+
+            <b-field horizontal label="Location">
+                <b-input v-model="location" placeholder=""></b-input>
+            </b-field>
+
+            <b-field horizontal label="Email">
+                <b-input v-model="email" placeholder=""></b-input>
+            </b-field>
+
+            <b-field horizontal label="Profile">
+                <b-input v-model="profile" placeholder=""></b-input>
             </b-field>
 
             <b-field horizontal>
                     <button type="submit" class="button is-primary" v-bind:disabled="waiting">
-                    Verify Candidate
+                    Update Validator
                     </button>
             </b-field>
         </form>
@@ -47,8 +69,14 @@
             return {
                 from: '',
                 password: '',
-                candidate: '',
-                verified: '',
+                pubKey: '',
+                compRate: '',
+                maxAmount: '',
+                name: '',
+                website: '',
+                email: '',
+                location: '',
+                profile: '',
 
                 waiting: false,
                 txs: []
@@ -57,11 +85,17 @@
         methods: {
             sendTx() {
                 this.waiting = true
-                this.$http.post('/verify', {
+                this.$http.post('/update', {
                     from: this.from,
                     password: this.password,
-                    candidate: this.candidate,
-                    verified: this.verified
+                    pubKey: this.pubKey,
+                    compRate: this.compRate,
+                    maxAmount: this.maxAmount,
+                    name: this.name,
+                    website: this.website,
+                    email: this.email,
+                    location: this.location,
+                    profile: this.profile
                 })
                 .then((response) => {
                     this.txs.push({hash:response.data})

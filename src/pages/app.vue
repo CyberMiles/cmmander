@@ -21,6 +21,22 @@
             <b-tab-item label="Withdraw">
 				<withdraw></withdraw>
             </b-tab-item>
+
+            <b-tab-item label="CompRate">
+				<compRate></compRate>
+            </b-tab-item>
+
+            <b-tab-item label="Update">
+				<update></update>
+            </b-tab-item>
+
+            <b-tab-item label="Shift">
+				<shift></shift>
+            </b-tab-item>
+
+            <b-tab-item label="Accept">
+				<accept></accept>
+            </b-tab-item>
         </b-tabs>
     </section>
 </template>
@@ -31,6 +47,10 @@
 	import Activate from './activate.vue'
 	import Deactivate from './deactivate.vue'
 	import Withdraw from './withdraw.vue'
+	import CompRate from './comprate.vue'
+	import Update from './update.vue'
+	import Shift from './shift.vue'
+	import Accept from './accept.vue'
     export default {
         data() {
             return {
@@ -42,7 +62,11 @@
 			Verify,
 			Activate,
 			Deactivate,
-			Withdraw
+			Withdraw,
+            CompRate,
+            Update,
+            Shift,
+            Accept
 		},
 		methods: {
 			getCmtTx(hash, txs) {

@@ -10,19 +10,13 @@
                 <b-input type="password" v-model="password"></b-input>
             </b-field>
 
-            <b-field horizontal label="Candidate">
-                <b-input v-model="candidate" placeholder="0x"></b-input>
-            </b-field>
-
-            <b-field horizontal label="Verified">
-                <b-switch v-model="verified">
-                    {{ verified }}
-                </b-switch>
+            <b-field horizontal label="Request Id">
+                <b-input v-model="requestId" placeholder=""></b-input>
             </b-field>
 
             <b-field horizontal>
                     <button type="submit" class="button is-primary" v-bind:disabled="waiting">
-                    Verify Candidate
+                    Accept Shift
                     </button>
             </b-field>
         </form>
@@ -47,8 +41,7 @@
             return {
                 from: '',
                 password: '',
-                candidate: '',
-                verified: '',
+                requestId: '',
 
                 waiting: false,
                 txs: []
@@ -57,11 +50,10 @@
         methods: {
             sendTx() {
                 this.waiting = true
-                this.$http.post('/verify', {
+                this.$http.post('/accept', {
                     from: this.from,
                     password: this.password,
-                    candidate: this.candidate,
-                    verified: this.verified
+                    requestId: this.requestId
                 })
                 .then((response) => {
                     this.txs.push({hash:response.data})

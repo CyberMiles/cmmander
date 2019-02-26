@@ -70,6 +70,46 @@ app.post('/withdraw', (req, res) => {
 	}
 })
 
+app.post('/comprate', (req, res) => {
+	try {
+		let tx = web3Cmt.compRate(req.body)
+		res.send(tx)
+	} catch (e) {
+		console.log(e)
+		res.status(500).send(e.message)
+	}
+})
+
+app.post('/update', (req, res) => {
+	try {
+		let tx = web3Cmt.update(req.body)
+		res.send(tx)
+	} catch (e) {
+		console.log(e)
+		res.status(500).send(e.message)
+	}
+})
+
+app.post('/shift', (req, res) => {
+	try {
+		let tx = web3Cmt.shift(req.body)
+		res.send(tx)
+	} catch (e) {
+		console.log(e)
+		res.status(500).send(e.message)
+	}
+})
+
+app.post('/accept', (req, res) => {
+	try {
+		let tx = web3Cmt.accept(req.body)
+		res.send(tx)
+	} catch (e) {
+		console.log(e)
+		res.status(500).send(e.message)
+	}
+})
+
 app.get('/getcmttx', (req, res) => {
 	try {
 		let tx = web3Cmt.getCmtTx(req.query.hash)
