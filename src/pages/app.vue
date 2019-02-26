@@ -18,6 +18,10 @@
 				<deactivate></deactivate>
             </b-tab-item>
 
+            <b-tab-item label="Abort">
+				<abort></abort>
+            </b-tab-item>
+
             <b-tab-item label="Withdraw">
 				<withdraw></withdraw>
             </b-tab-item>
@@ -51,6 +55,7 @@
 	import Update from './update.vue'
 	import Shift from './shift.vue'
 	import Accept from './accept.vue'
+    import Abort from './abort.vue'
     export default {
         data() {
             return {
@@ -62,6 +67,7 @@
 			Verify,
 			Activate,
 			Deactivate,
+            Abort,
 			Withdraw,
             CompRate,
             Update,

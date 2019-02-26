@@ -107,6 +107,27 @@ function deactivate(params) {
 	return sendRawTx(from, password, rawTx)
 }
 
+function abort(params) {
+    const from = params.from
+    const password = params.password
+
+	let cmtInput = {
+		type: 'stake/withdrawCandidacy',
+		data: {}
+	}
+
+	const nonce = web3.cmt.getTransactionCount(from)
+
+	let rawTx = {
+		nonce: nonce,
+		from: from,
+		chainId: ChainId,
+		data: '0x' + Buffer.from(JSON.stringify(cmtInput)).toString('hex')
+	}
+
+	return sendRawTx(from, password, rawTx)
+}
+
 function withdraw(params) {
     const from = params.from
     const password = params.password
@@ -273,4 +294,4 @@ function dec2hex(str){ // .toString(16) only works up to 2^53
 	return hex.join('')
 }
 
-module.exports = {transfer, verify, activate, deactivate, withdraw, compRate, update, shift, accept, getCmtTx}
+module.exports = {transfer, verify, activate, deactivate, abort, withdraw, compRate, update, shift, accept, getCmtTx}

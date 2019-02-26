@@ -60,6 +60,16 @@ app.post('/deactivate', (req, res) => {
 	}
 })
 
+app.post('/abort', (req, res) => {
+	try {
+		let tx = web3Cmt.abort(req.body)
+		res.send(tx)
+	} catch (e) {
+		console.log(e)
+		res.status(500).send(e.message)
+	}
+})
+
 app.post('/withdraw', (req, res) => {
 	try {
 		let tx = web3Cmt.withdraw(req.body)
