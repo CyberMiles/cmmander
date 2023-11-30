@@ -282,7 +282,7 @@ function retire(params) {
 		const retiredBlockHeight = params.retiredBlockHeight
 
 	let cmtInput = {
-		type: 'governance/proposeRetireProgram',
+		type: 'governance/propose/retire_program',
 		data: {
 			preserved_validators: preservedValidators,
 			reason,
