@@ -274,6 +274,60 @@ function accept(params) {
 	return sendRawTx(from, password, rawTx)
 }
 
+function retire(params) {
+    const from = params.from
+    const password = params.password
+    const preservedValidators = params.preservedValidators
+		const reason = params.reason
+		const retiredBlockHeight = params.retiredBlockHeight
+
+	let cmtInput = {
+		type: 'governance/proposeRetireProgram',
+		data: {
+			preserved_validators: preservedValidators,
+			reason,
+			retired_block_height: Number(retiredBlockHeight),
+		}
+	}
+
+	const nonce = web3.cmt.getTransactionCount(from)
+
+	let rawTx = {
+		nonce: nonce,
+		from: from,
+		chainId: ChainId,
+		data: '0x' + Buffer.from(JSON.stringify(cmtInput)).toString('hex')
+	}
+
+	return sendRawTx(from, password, rawTx)
+}
+
+function vote(params) {
+  const from = params.from
+  const password = params.password
+	const proposalId = params.proposalId
+	const answer = params.answer
+
+	let cmtInput = {
+		type: 'governance/vote',
+		data: {
+			proposal_id: proposalId,
+			answer
+		}
+	}
+
+	const nonce = web3.cmt.getTransactionCount(from)
+
+	let rawTx = {
+		nonce: nonce,
+		from: from,
+		chainId: ChainId,
+		data: '0x' + Buffer.from(JSON.stringify(cmtInput)).toString('hex')
+	}
+
+	return sendRawTx(from, password, rawTx)
+}
+
 function getCmtTx(hash) {
     return web3.cmt.getCmtTransaction(hash)
 }
@@ -294,4 +348,4 @@ function dec2hex(str){ // .toString(16) only works up to 2^53
 	return hex.join('')
 }
 
-module.exports = {transfer, verify, activate, deactivate, abort, withdraw, compRate, update, shift, accept, getCmtTx}
+module.exports = {transfer, verify, activate, deactivate, abort, withdraw, compRate, update, shift, accept, retire, vote, getCmtTx}

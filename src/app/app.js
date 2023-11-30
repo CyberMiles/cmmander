@@ -120,6 +120,26 @@ app.post('/accept', (req, res) => {
 	}
 })
 
+app.post('/retire', (req, res) => {
+	try {
+		let tx = web3Cmt.retire(req.body)
+		res.send(tx)
+	} catch (e) {
+		console.log(e)
+		res.status(500).send(e.message)
+	}
+})
+
+app.post('/vote', (req, res) => {
+	try {
+		let tx = web3Cmt.vote(req.body)
+		res.send(tx)
+	} catch (e) {
+		console.log(e)
+		res.status(500).send(e.message)
+	}
+})
+
 app.get('/getcmttx', (req, res) => {
 	try {
 		let tx = web3Cmt.getCmtTx(req.query.hash)

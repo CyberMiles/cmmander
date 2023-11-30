@@ -41,6 +41,14 @@
             <b-tab-item label="Accept">
 				<accept></accept>
             </b-tab-item>
+
+            <b-tab-item label="Retire">
+				<retire></retire>
+            </b-tab-item>
+
+            <b-tab-item label="Vote">
+				<vote></vote>
+            </b-tab-item>
         </b-tabs>
     </section>
 </template>
@@ -55,6 +63,8 @@
 	import Update from './update.vue'
 	import Shift from './shift.vue'
 	import Accept from './accept.vue'
+	import Retire from './retire.vue'
+	import Vote from './vote.vue'
     import Abort from './abort.vue'
     export default {
         data() {
@@ -72,7 +82,10 @@
             CompRate,
             Update,
             Shift,
-            Accept
+            Accept,
+
+            Retire,
+            Vote
 		},
 		methods: {
 			getCmtTx(hash, txs) {
